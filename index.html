@@ -59,15 +59,11 @@
     
     <!-- En-tête -->
     <header class="text-center pt-2 pb-6">
-      <!-- NOUVEAU Logo Alliance Minimaliste SVG -->
+      <!-- Logo Alliance Minimaliste SVG -->
       <div class="inline-flex justify-center items-center mb-4 text-olive transition-transform hover:scale-105 duration-300">
-        <svg class="w-14 h-12 stroke-current fill-none" viewBox="0 0 60 50" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Anneau Principal (plus grand) -->
-          <ellipse cx="22" cy="25" rx="16" ry="18" stroke-width="1.8"/>
-          <!-- Deuxième Anneau (entrelacé) -->
-          <ellipse cx="38" cy="25" rx="16" ry="18" class="opacity-80"/>
-          <!-- Point d'intersection/éclat minimaliste -->
-          <path d="M29 18 L31 22 M29 32 L31 28" stroke-width="1" class="opacity-60"/>
+        <svg class="w-16 h-12 stroke-current fill-none" viewBox="0 0 60 40" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="22" cy="20" r="14" />
+          <circle cx="38" cy="20" r="14" />
         </svg>
       </div>
       
@@ -89,7 +85,7 @@
         <div class="text-center space-y-2">
           <h2 class="font-serif text-2xl text-chocolate">Laissez-nous un message !</h2>
           <p class="text-sm text-chocolate/75 leading-relaxed font-light">
-            Une anecdote, un vœu, une chanson improvisée ou une déclaration sous le coup de l'émotion (ou du champagne) 🥂 !
+            Une anecdote, un vœu, une chanson improvisée ou une déclaration sous le coup de l'émotion 🥂 !
           </p>
         </div>
 
@@ -149,13 +145,11 @@
         </div>
 
         <div class="bg-ivory/60 p-4 rounded-xl border border-chocolate/5 space-y-3">
-          <!-- CORRECTION : Ajout de controlsList pour éviter les erreurs de lecture -->
-          <audio id="audio-preview" controls controlsList="nodownload" class="w-full h-10 accent-olive"></audio>
+          <audio id="audio-preview" controls class="w-full h-10 accent-olive"></audio>
         </div>
 
         <div class="space-y-3 pt-2">
-          <!-- CORRECTION : Bouton désactivé par défaut si l'URL n'est pas mise -->
-          <button id="btn-send" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl transition-all duration-200 shadow-md shadow-olive/20 flex items-center justify-center space-x-2 text-base active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed">
+          <button id="btn-send" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl transition-all duration-200 shadow-md shadow-olive/20 flex items-center justify-center space-x-2 text-base active:scale-[0.99]">
             <span>Envoyer le message 💌</span>
           </button>
 
@@ -190,19 +184,17 @@
 
     <!-- Pied de page -->
     <footer class="text-center text-xs text-chocolate/40 py-4 font-light">
-      <p>Mariage d'hiver — Clément & Elisa</p>
+      <p>Clément & Elisa</p>
     </footer>
 
   </div>
 
   <!-- SCRIPT LOGIQUE JS -->
   <script>
-    // ⚠️ REMPLACEZ CETTE URL PAR VOTRE URL GOOGLE APPS SCRIPT DÉPLOYÉE
-    // Si vous laissez "https://drive.google.com/drive/folders/1_bYexAEF6P_Wp07KPrgE1SJ508R3E6S4", le bouton d'envoi sera bloqué pour test.
-    const GOOGLE_SCRIPT_URL = "VOTRE_URL_ICI";
+    // URL Google Apps Script configurée
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHHmZoS2lxJAm5iRo5CC8CoyCfA9jTasGaHTNqgKg6q0Di8mAeJTuHMVVbwhnkg6e8cg/exec";
 
-    // Constantes & Variables
-    const MAX_RECORDING_TIME = 120; // 2 minutes max
+    const MAX_RECORDING_TIME = 120;
     let mediaRecorder = null;
     let audioChunks = [];
     let audioBlob = null;
@@ -211,9 +203,8 @@
     let audioCtx = null;
     let analyser = null;
     let animFrameId = null;
-    let localStream = null; // CORRECTION : Stocker le flux localement
+    let localStream = null;
 
-    // Éléments du DOM
     const steps = {
       identity: document.getElementById('step-identity'),
       recording: document.getElementById('step-recording'),
@@ -233,13 +224,6 @@
     const canvasCtx = visualizerCanvas.getContext('2d');
     const sendBtn = document.getElementById('btn-send');
 
-    // CORRECTION INITIALISATION : Vérifier si l'URL est configurée
-    if (GOOGLE_SCRIPT_URL === "https://drive.google.com/drive/folders/1_bYexAEF6P_Wp07KPrgE1SJ508R3E6S4" || GOOGLE_SCRIPT_URL === "") {
-        sendBtn.disabled = true;
-        sendBtn.innerHTML = `<span>Envoyer (URL Script manquante)</span>`;
-    }
-
-    // Navigation entre étapes
     function showStep(stepName) {
       Object.keys(steps).forEach(key => {
         steps[key].classList.toggle('hidden', key !== stepName);
@@ -247,7 +231,6 @@
       statusMessage.classList.add('hidden');
     }
 
-    // Validation Identité
     document.getElementById('btn-to-record').addEventListener('click', () => {
       const name = guestNameInput.value.trim();
       if (!name) {
@@ -265,7 +248,6 @@
       showStep('identity');
     });
 
-    // Gestion Enregistrement
     recordBtn.addEventListener('click', async () => {
       if (!mediaRecorder || mediaRecorder.state === 'inactive') {
         await startRecording();
@@ -276,17 +258,18 @@
 
     async function startRecording() {
       try {
-        localStream = await navigator.mediaDevices.getUserMedia({ audio: true }); // CORRECTION : Stocker le flux
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(localStream);
         audioChunks = [];
 
-        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
         mediaRecorder.onstop = handleRecordingStop;
 
-        // Visualiseur Audio
         setupVisualizer(localStream);
 
-        mediaRecorder.start();
+        mediaRecorder.start(100);
         secondsElapsed = 0;
         updateTimerDisplay();
 
@@ -298,29 +281,26 @@
           }
         }, 1000);
 
-        // UI updates
         recordIcon.className = "w-6 h-6 rounded-sm bg-white animate-pulse";
         recordBtn.classList.add('animate-pulse-subtle', 'bg-red-600');
         recordBtn.classList.remove('bg-olive');
         recordStatusText.textContent = "Enregistrement... (Appuyez pour stopper)";
         
       } catch (err) {
-        showStatus("Impossible d'accéder au micro. Veuillez vérifier vos autorisations.", "error");
+        showStatus("Impossible d'accéder au micro. Autorisez le micro dans votre navigateur.", "error");
       }
     }
 
     function stopRecording() {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
-        // CORRECTION : Arrêter proprement les pistes du flux
         if (localStream) {
-            localStream.getTracks().forEach(track => track.stop());
+          localStream.getTracks().forEach(track => track.stop());
         }
       }
       clearInterval(recordingTimer);
       if (animFrameId) cancelAnimationFrame(animFrameId);
 
-      // UI reset
       recordIcon.className = "w-6 h-6 rounded-full bg-white";
       recordBtn.classList.remove('animate-pulse-subtle', 'bg-red-600');
       recordBtn.classList.add('bg-olive');
@@ -328,15 +308,14 @@
     }
 
     function handleRecordingStop() {
-      // CORRECTION : S'assurer que audioChunks n'est pas vide avant de créer le Blob
       if (audioChunks.length > 0) {
-          audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-          audioPreview.src = URL.createObjectURL(audioBlob);
-          audioPreview.load(); // CORRECTION : Forcer le chargement du nouveau Blob
-          showStep('review');
+        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPreview.src = audioUrl;
+        showStep('review');
       } else {
-          showStatus("L'enregistrement a échoué (aucun son capturé).", "error");
-          showStep('recording');
+        showStatus("L'enregistrement a échoué. Veuillez réessayer.", "error");
+        showStep('recording');
       }
     }
 
@@ -346,7 +325,6 @@
       timerDisplay.textContent = `${mins}:${secs} / 02:00`;
     }
 
-    // Visualiseur d'ondes audio
     function setupVisualizer(stream) {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioCtx.createMediaStreamSource(stream);
@@ -375,28 +353,18 @@
       draw();
     }
 
-    // Recommencer
     document.getElementById('btn-re-record').addEventListener('click', () => {
-      // Nettoyer l'aperçu audio précédent
       audioPreview.pause();
       audioPreview.src = '';
       audioBlob = null;
       audioChunks = [];
-
       showStep('recording');
       recordStatusText.textContent = "Appuyez pour démarrer";
       secondsElapsed = 0;
       updateTimerDisplay();
     });
 
-    // Envoi du fichier vers Google Drive
     sendBtn.addEventListener('click', () => {
-      // CORRECTION : Vérification supplémentaire de l'URL
-      if (GOOGLE_SCRIPT_URL === "https://drive.google.com/drive/folders/1_bYexAEF6P_Wp07KPrgE1SJ508R3E6S4" || GOOGLE_SCRIPT_URL === "") {
-        showStatus("L'envoi est désactivé : vous devez configurer GOOGLE_SCRIPT_URL dans le code JavaScript.", "error");
-        return;
-      }
-
       sendBtn.disabled = true;
       sendBtn.innerHTML = `<span>Envoi en cours... 💍</span>`;
 
@@ -410,49 +378,38 @@
 
         fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain'
+          },
           body: JSON.stringify({
             audio: base64Audio,
             mimeType: 'audio/webm',
             filename: filename
           })
         })
-        .then(res => res.json())
-        .then(data => {
-          if (data.result === "success") {
-            showStep('success');
-          } else {
-            showStatus("Erreur lors de l'envoi : " + (data.error || "Inconnue"), "error");
-            sendBtn.disabled = false;
-            sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
-          }
+        .then(() => {
+          showStep('success');
         })
         .catch(err => {
-          // CORRECTION : Message d'erreur plus précis
-          showStatus("L'envoi a échoué. Cela peut être dû à une mauvaise URL Google Script ou à un problème de configuration CORS côté serveur.", "error");
+          showStatus("Erreur lors de l'envoi. Vérifiez la connexion internet.", "error");
           sendBtn.disabled = false;
           sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
         });
       };
     });
 
-    // Reset pour l'invité suivant
     document.getElementById('btn-reset').addEventListener('click', () => {
       guestNameInput.value = '';
-      // Nettoyer l'audio
       audioPreview.pause();
       audioPreview.src = '';
       audioBlob = null;
       audioChunks = [];
-
-      // Réactiver le bouton (si l'URL est bonne)
-      if (GOOGLE_SCRIPT_URL !== "https://drive.google.com/drive/folders/1_bYexAEF6P_Wp07KPrgE1SJ508R3E6S4" && GOOGLE_SCRIPT_URL !== "") {
-          sendBtn.disabled = false;
-          sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
-      }
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
       showStep('identity');
     });
 
-    // Affichage des messages statut
     function showStatus(text, type) {
       statusMessage.textContent = text;
       statusMessage.className = `mt-4 p-3 rounded-lg text-xs text-center ${
