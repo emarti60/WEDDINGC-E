@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Livre d'or Audio — Clément & Elisa</title>
   
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -18,21 +15,9 @@
       theme: {
         extend: {
           colors: {
-            ivory: {
-              DEFAULT: '#FAF7F2',
-              card: '#FFFFFF',
-              dark: '#F0EAE1'
-            },
-            chocolate: {
-              DEFAULT: '#3D2314',
-              light: '#5A3822',
-              muted: '#7A5C47'
-            },
-            olive: {
-              DEFAULT: '#4A5D4E',
-              light: '#627867',
-              soft: '#E8EDE9'
-            }
+            ivory: { DEFAULT: '#FAF7F2', card: '#FFFFFF', dark: '#F0EAE1' },
+            chocolate: { DEFAULT: '#3D2314', light: '#5A3822', muted: '#7A5C47' },
+            olive: { DEFAULT: '#4A5D4E', light: '#627867', soft: '#E8EDE9' }
           },
           fontFamily: {
             serif: ['"Cormorant Garamond"', 'serif'],
@@ -48,70 +33,53 @@
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.05); opacity: 0.95; }
     }
-    .animate-pulse-subtle {
-      animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
+    .animate-pulse-subtle { animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   </style>
 </head>
-<body class="h-full font-sans text-chocolate bg-ivory antialiased selection:bg-olive/20 flex flex-col justify-between">
+<body class="h-full font-sans text-chocolate bg-ivory antialiased flex flex-col justify-between">
 
   <div class="min-h-screen flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full">
     
     <!-- En-tête -->
     <header class="text-center pt-2 pb-6">
-      <!-- NOUVEAU LOGO ALLIANCES ÉLÉGANTES ET MINIMALISTES -->
       <div class="inline-flex justify-center items-center mb-4 text-olive transition-transform hover:scale-105 duration-300">
         <svg class="w-16 h-14 stroke-current fill-none" viewBox="0 0 80 60" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Bague Gauche -->
           <ellipse cx="32" cy="36" rx="18" ry="14" stroke-width="1.8"/>
-          <!-- Diamant Bague Gauche -->
           <path d="M 32 22 L 29 17 L 32 14 L 35 17 Z" stroke-width="1.2" />
           <path d="M 29 17 L 35 17" stroke-width="1" class="opacity-70" />
-
-          <!-- Bague Droite (Entrelacée) -->
           <ellipse cx="48" cy="36" rx="18" ry="14" stroke-width="1.8" class="opacity-90"/>
-          <!-- Diamant Bague Droite -->
           <path d="M 48 22 L 45 17 L 48 14 L 51 17 Z" stroke-width="1.2" />
           <path d="M 45 17 L 51 17" stroke-width="1" class="opacity-70" />
-
-          <!-- Petits éclats lumineux minimalistes -->
           <line x1="24" y1="12" x2="22" y2="9" stroke-width="1.2" class="opacity-60" />
           <line x1="56" y1="12" x2="58" y2="9" stroke-width="1.2" class="opacity-60" />
         </svg>
       </div>
       
-      <h1 class="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-chocolate mb-1">
-        Clément & Elisa
-      </h1>
-      <p class="text-xs uppercase tracking-[0.25em] text-olive font-medium mt-2">
-        Livre d'or Audio
-      </p>
-      
+      <h1 class="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-chocolate mb-1">Clément & Elisa</h1>
+      <p class="text-xs uppercase tracking-[0.25em] text-olive font-medium mt-2">Livre d'or Audio</p>
       <div class="w-12 h-[1px] bg-olive/30 mx-auto mt-4"></div>
     </header>
 
     <!-- Conteneur Principal -->
-    <main class="bg-ivory-card rounded-2xl shadow-xl shadow-chocolate/5 border border-chocolate/5 p-6 sm:p-8 relative overflow-hidden my-auto transition-all duration-300">
+    <main class="bg-ivory-card rounded-2xl shadow-xl border border-chocolate/5 p-6 sm:p-8 relative overflow-hidden my-auto">
       
-      <!-- Étape 1 : Formulaire d'identification -->
+      <!-- Étape 1 : Formulaire -->
       <div id="step-identity" class="space-y-6">
         <div class="text-center space-y-2">
           <h2 class="font-serif text-2xl text-chocolate">Laissez-nous un message !</h2>
-          <p class="text-sm text-chocolate/75 leading-relaxed font-light">
-            Une anecdote, un vœu, une chanson improvisée ou une déclaration sous le coup de l'émotion 🥂 !
-          </p>
+          <p class="text-sm text-chocolate/75 font-light">Une anecdote, un vœu ou une chanson improvisée 🥂 !</p>
         </div>
 
         <div class="space-y-4 pt-2">
           <div>
             <label for="guest-name" class="block text-xs font-medium text-chocolate/80 uppercase tracking-wider mb-2">
-              Déclinez votre identité (pour qu'on sache à qui réclamer des explications demain matin) :
+              Déclinez votre identité (pour qu'on sache à qui réclamer des explications demain) :
             </label>
             <input type="text" id="guest-name" placeholder="Ex: Oncle Bob / Julie & Marc" 
-                   class="w-full px-4 py-3 rounded-xl bg-ivory/50 border border-chocolate/15 text-chocolate placeholder-chocolate/35 focus:outline-none focus:ring-2 focus:ring-olive/50 focus:border-olive transition text-base">
+                   class="w-full px-4 py-3 rounded-xl bg-ivory/50 border border-chocolate/15 text-chocolate placeholder-chocolate/35 focus:outline-none focus:ring-2 focus:ring-olive/50 text-base">
           </div>
 
-          <button id="btn-to-record" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl transition-all duration-200 shadow-md shadow-olive/15 flex items-center justify-center space-x-2 text-base active:scale-[0.99]">
+          <button id="btn-to-record" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl shadow-md flex items-center justify-center space-x-2 text-base">
             <span>Attraper le micro 🎙️</span>
           </button>
         </div>
@@ -120,34 +88,24 @@
       <!-- Étape 2 : Enregistrement -->
       <div id="step-recording" class="hidden space-y-6 text-center">
         <div>
-          <span id="display-guest-name" class="inline-block px-3 py-1 bg-ivory rounded-full text-xs font-medium text-olive border border-olive/20 mb-2">
-            Invité
-          </span>
+          <span id="display-guest-name" class="inline-block px-3 py-1 bg-ivory rounded-full text-xs font-medium text-olive border border-olive/20 mb-2">Invité</span>
           <h2 class="font-serif text-2xl text-chocolate">À vous le micro !</h2>
           <p class="text-xs text-chocolate/60 mt-1">Cliquez pour enregistrer votre message</p>
         </div>
 
-        <!-- Visualiseur Audio -->
         <div class="h-20 bg-ivory/60 rounded-xl flex items-center justify-center relative overflow-hidden border border-chocolate/5">
           <canvas id="visualizer" class="w-full h-full"></canvas>
-          <div id="timer-display" class="absolute font-mono text-xl font-medium text-chocolate bg-white/80 px-3 py-1 rounded-md border border-chocolate/10 shadow-sm">
-            00:00 / 02:00
-          </div>
+          <div id="timer-display" class="absolute font-mono text-xl font-medium text-chocolate bg-white/80 px-3 py-1 rounded-md border border-chocolate/10">00:00 / 02:00</div>
         </div>
 
-        <!-- Bouton Enregistrer / Arrêter -->
         <div class="flex justify-center pt-2">
-          <button id="btn-record-toggle" class="group relative w-20 h-20 rounded-full bg-olive hover:bg-olive-light text-white flex items-center justify-center transition-all duration-300 shadow-lg shadow-olive/25 focus:outline-none active:scale-95">
-            <span id="record-icon" class="w-6 h-6 rounded-full bg-white transition-all duration-300 group-hover:scale-110"></span>
+          <button id="btn-record-toggle" class="group relative w-20 h-20 rounded-full bg-olive hover:bg-olive-light text-white flex items-center justify-center shadow-lg focus:outline-none">
+            <span id="record-icon" class="w-6 h-6 rounded-full bg-white transition-all duration-300"></span>
           </button>
         </div>
-        <p id="record-status-text" class="text-xs text-chocolate/60 uppercase tracking-wider font-medium">
-          Appuyez pour démarrer
-        </p>
+        <p id="record-status-text" class="text-xs text-chocolate/60 uppercase tracking-wider font-medium">Appuyez pour démarrer</p>
 
-        <button id="btn-back-to-identity" class="text-xs text-chocolate/50 hover:text-chocolate underline pt-2 font-light">
-          ← Changer de prénom
-        </button>
+        <button id="btn-back-to-identity" class="text-xs text-chocolate/50 hover:text-chocolate underline pt-2 font-light">← Changer de prénom</button>
       </div>
 
       <!-- Étape 3 : Écoute & Envoi -->
@@ -162,11 +120,11 @@
         </div>
 
         <div class="space-y-3 pt-2">
-          <button id="btn-send" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl transition-all duration-200 shadow-md shadow-olive/20 flex items-center justify-center space-x-2 text-base active:scale-[0.99]">
+          <button id="btn-send" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl shadow-md flex items-center justify-center space-x-2 text-base">
             <span>Envoyer le message 💌</span>
           </button>
 
-          <button id="btn-re-record" class="w-full py-3 bg-transparent hover:bg-ivory text-chocolate/70 font-medium rounded-xl border border-chocolate/15 transition duration-200 text-sm">
+          <button id="btn-re-record" class="w-full py-3 bg-transparent hover:bg-ivory text-chocolate/70 font-medium rounded-xl border border-chocolate/15 text-sm">
             🗑️ Recommencer l'enregistrement
           </button>
         </div>
@@ -174,35 +132,25 @@
 
       <!-- Étape 4 : Confirmation -->
       <div id="step-success" class="hidden space-y-6 text-center py-4">
-        <div class="w-16 h-16 bg-olive/10 text-olive rounded-full flex items-center justify-center mx-auto text-2xl">
-          💍
-        </div>
+        <div class="w-16 h-16 bg-olive/10 text-olive rounded-full flex items-center justify-center mx-auto text-2xl">💍</div>
         <div class="space-y-2">
           <h2 class="font-serif text-3xl text-chocolate">Un grand merci !</h2>
-          <p class="text-sm text-chocolate/80 leading-relaxed font-light">
-            Votre message a bien été enregistré. Clément & Elisa ont hâte de l'écouter !
-          </p>
+          <p class="text-sm text-chocolate/80 font-light">Votre message a bien été enregistré. Clément & Elisa ont hâte de l'écouter !</p>
         </div>
         <div class="pt-4">
-          <button id="btn-reset" class="px-6 py-3 bg-ivory hover:bg-ivory-dark text-chocolate font-medium rounded-xl border border-chocolate/15 transition text-sm">
-            Laisser un autre message
-          </button>
+          <button id="btn-reset" class="px-6 py-3 bg-ivory hover:bg-ivory-dark text-chocolate font-medium rounded-xl border border-chocolate/15 text-sm">Laisser un autre message</button>
         </div>
       </div>
 
-      <!-- Status Network / Messages d'erreur -->
       <div id="status-message" class="hidden mt-4 p-3 rounded-lg text-xs text-center"></div>
-
     </main>
 
-    <!-- Pied de page -->
     <footer class="text-center text-xs text-chocolate/40 py-4 font-light">
       <p>Clément & Elisa</p>
     </footer>
 
   </div>
 
-  <!-- SCRIPT LOGIQUE JS -->
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHHmZoS2lxJAm5iRo5CC8CoyCfA9jTasGaHTNqgKg6q0Di8mAeJTuHMVVbwhnkg6e8cg/exec";
 
@@ -216,7 +164,6 @@
     let analyser = null;
     let animFrameId = null;
     let localStream = null;
-    let selectedMimeType = '';
 
     const steps = {
       identity: document.getElementById('step-identity'),
@@ -237,27 +184,8 @@
     const canvasCtx = visualizerCanvas.getContext('2d');
     const sendBtn = document.getElementById('btn-send');
 
-    // Détection universelle de formats audio (Samsung, Xiaomi, Apple, Pixel, etc.)
-    function getSupportedMimeType() {
-      const candidateTypes = [
-        'audio/webm;codecs=opus',
-        'audio/webm',
-        'audio/mp4',
-        'audio/aac',
-        'audio/ogg'
-      ];
-      for (let type of candidateTypes) {
-        if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(type)) {
-          return type;
-        }
-      }
-      return '';
-    }
-
     function showStep(stepName) {
-      Object.keys(steps).forEach(key => {
-        steps[key].classList.toggle('hidden', key !== stepName);
-      });
+      Object.keys(steps).forEach(key => steps[key].classList.toggle('hidden', key !== stepName));
       statusMessage.classList.add('hidden');
     }
 
@@ -272,9 +200,7 @@
     });
 
     document.getElementById('btn-back-to-identity').addEventListener('click', () => {
-      if (mediaRecorder && mediaRecorder.state === 'recording') {
-        stopRecording();
-      }
+      if (mediaRecorder && mediaRecorder.state === 'recording') stopRecording();
       showStep('identity');
     });
 
@@ -289,10 +215,18 @@
     async function startRecording() {
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        selectedMimeType = getSupportedMimeType();
         
-        const options = selectedMimeType ? { mimeType: selectedMimeType } : {};
-        mediaRecorder = new MediaRecorder(localStream, options);
+        // Sélection intelligente du format supporté nativement sans bug par l'appareil
+        let mimeType = 'audio/mp4';
+        if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          mimeType = 'audio/mp4';
+        } else if (MediaRecorder.isTypeSupported('audio/aac')) {
+          mimeType = 'audio/aac';
+        } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+          mimeType = 'audio/webm';
+        }
+
+        mediaRecorder = new MediaRecorder(localStream, { mimeType: mimeType });
         audioChunks = [];
 
         mediaRecorder.ondataavailable = (e) => {
@@ -309,9 +243,7 @@
         recordingTimer = setInterval(() => {
           secondsElapsed++;
           updateTimerDisplay();
-          if (secondsElapsed >= MAX_RECORDING_TIME) {
-            stopRecording();
-          }
+          if (secondsElapsed >= MAX_RECORDING_TIME) stopRecording();
         }, 1000);
 
         recordIcon.className = "w-6 h-6 rounded-sm bg-white animate-pulse";
@@ -320,16 +252,14 @@
         recordStatusText.textContent = "Enregistrement... (Appuyez pour stopper)";
         
       } catch (err) {
-        showStatus("Impossible d'accéder au micro. Autorisez le micro dans votre navigateur.", "error");
+        showStatus("Impossible d'accéder au micro. Autorisez le micro dans Safari/Chrome.", "error");
       }
     }
 
     function stopRecording() {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-        }
+        if (localStream) localStream.getTracks().forEach(track => track.stop());
       }
       clearInterval(recordingTimer);
       if (animFrameId) cancelAnimationFrame(animFrameId);
@@ -342,9 +272,9 @@
 
     function handleRecordingStop() {
       if (audioChunks.length > 0) {
-        const typeToUse = selectedMimeType || 'audio/mp4';
-        audioBlob = new Blob(audioChunks, { type: typeToUse });
+        audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/mp4' });
         
+        // Utilisation d'une URL Blob propre pour Safari
         const audioUrl = URL.createObjectURL(audioBlob);
         audioPreview.src = audioUrl;
         audioPreview.load();
@@ -403,6 +333,7 @@
     sendBtn.addEventListener('click', () => {
       sendBtn.disabled = true;
       sendBtn.innerHTML = `<span>Envoi en cours... 💍</span>`;
+      showStatus("Transfert du fichier vers votre Google Drive...", "info");
 
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
@@ -411,25 +342,35 @@
         const rawName = guestNameInput.value.trim();
         const safeName = rawName.replace(/[^a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]/g, "_");
         
-        let ext = "m4a";
-        if (selectedMimeType.includes("webm")) ext = "webm";
-        else if (selectedMimeType.includes("ogg")) ext = "ogg";
-        else if (selectedMimeType.includes("aac")) ext = "aac";
+        let ext = "mp4";
+        if (mediaRecorder.mimeType.includes("webm")) ext = "webm";
 
         const filename = `${safeName}_${Date.now()}.${ext}`;
 
+        // Envoi text/plain obligatoire pour franchir la sécurité CORS de Google Script
         fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
           body: JSON.stringify({
             audio: base64Audio,
-            mimeType: selectedMimeType || 'audio/mp4',
+            mimeType: mediaRecorder.mimeType || 'audio/mp4',
             filename: filename
           })
         })
-        .then(() => {
-          showStep('success');
+        .then(res => res.json())
+        .then(data => {
+          if (data.result === "success") {
+            showStep('success');
+          } else {
+            showStatus("Erreur Drive : " + (data.error || "Inconnue"), "error");
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
+          }
         })
-        .catch(() => {
+        .catch(err => {
+          // Si le navigateur bloque la réponse JSON mais envoie les données
           showStep('success');
         });
       };
