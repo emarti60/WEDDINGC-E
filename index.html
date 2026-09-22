@@ -1,2 +1,422 @@
-# WEDDINGC-E
-WEDDING C&amp;E
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-[#FAF7F2]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livre d'or Audio — Clément & Elisa</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: {
+              DEFAULT: '#FAF7F2',
+              card: '#FFFFFF',
+              dark: '#F0EAE1'
+            },
+            chocolate: {
+              DEFAULT: '#3D2314',
+              light: '#5A3822',
+              muted: '#7A5C47'
+            },
+            olive: {
+              DEFAULT: '#4A5D4E',
+              light: '#627867',
+              soft: '#E8EDE9'
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes pulse-subtle {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.95; }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-chocolate bg-ivory antialiased selection:bg-olive/20 flex flex-col justify-between">
+
+  <div class="min-h-screen flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full">
+    
+    <!-- En-tête -->
+    <header class="text-center pt-2 pb-6">
+      <!-- Logo Sapin Minimaliste SVG -->
+      <div class="inline-flex justify-center items-center mb-3 text-olive transition-transform hover:scale-105 duration-300">
+        <svg class="w-10 h-12 stroke-current fill-none" viewBox="0 0 40 50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 L20 44" stroke-width="1.2" stroke-dasharray="2 2" class="opacity-40"/>
+          <path d="M20 8 L10 18 H30 Z" />
+          <path d="M20 16 L7 28 H33 Z" />
+          <path d="M20 25 L4 40 H36 Z" />
+          <path d="M20 40 L20 46" stroke-width="2.5" />
+        </svg>
+      </div>
+      
+      <h1 class="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-chocolate mb-1">
+        Clément & Elisa
+      </h1>
+      <p class="text-xs uppercase tracking-[0.25em] text-olive font-medium mt-2">
+        Livre d'or Audio
+      </p>
+      
+      <div class="w-12 h-[1px] bg-olive/30 mx-auto mt-4"></div>
+    </header>
+
+    <!-- Conteneur Principal -->
+    <main class="bg-ivory-card rounded-2xl shadow-xl shadow-chocolate/5 border border-chocolate/5 p-6 sm:p-8 relative overflow-hidden my-auto transition-all duration-300">
+      
+      <!-- Étape 1 : Formulaire d'identification -->
+      <div id="step-identity" class="space-y-6">
+        <div class="text-center space-y-2">
+          <h2 class="font-serif text-2xl text-chocolate">Laissez-nous un message !</h2>
+          <p class="text-sm text-chocolate/75 leading-relaxed font-light">
+            Une anecdote, un vœu, une chanson improvisée ou une déclaration sous le coup de l'émotion (ou du champagne) 🥂 !
+          </p>
+        </div>
+
+        <div class="space-y-4 pt-2">
+          <div>
+            <label for="guest-name" class="block text-xs font-medium text-chocolate/80 uppercase tracking-wider mb-2">
+              Déclinez votre identité (pour qu'on sache à qui réclamer des explications demain matin) :
+            </label>
+            <input type="text" id="guest-name" placeholder="Ex: Oncle Bob / Julie & Marc" 
+                   class="w-full px-4 py-3 rounded-xl bg-ivory/50 border border-chocolate/15 text-chocolate placeholder-chocolate/35 focus:outline-none focus:ring-2 focus:ring-olive/50 focus:border-olive transition text-base">
+          </div>
+
+          <button id="btn-to-record" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl transition-all duration-200 shadow-md shadow-olive/15 flex items-center justify-center space-x-2 text-base active:scale-[0.99]">
+            <span>Attraper le micro 🎙️</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Étape 2 : Enregistrement -->
+      <div id="step-recording" class="hidden space-y-6 text-center">
+        <div>
+          <span id="display-guest-name" class="inline-block px-3 py-1 bg-ivory rounded-full text-xs font-medium text-olive border border-olive/20 mb-2">
+            Invité
+          </span>
+          <h2 class="font-serif text-2xl text-chocolate">À vous le micro !</h2>
+          <p class="text-xs text-chocolate/60 mt-1">Cliquez pour enregistrer votre message</p>
+        </div>
+
+        <!-- Visualiseur Audio -->
+        <div class="h-20 bg-ivory/60 rounded-xl flex items-center justify-center relative overflow-hidden border border-chocolate/5">
+          <canvas id="visualizer" class="w-full h-full"></canvas>
+          <div id="timer-display" class="absolute font-mono text-xl font-medium text-chocolate bg-white/80 px-3 py-1 rounded-md border border-chocolate/10 shadow-sm">
+            00:00 / 02:00
+          </div>
+        </div>
+
+        <!-- Bouton Enregistrer / Arrêter -->
+        <div class="flex justify-center pt-2">
+          <button id="btn-record-toggle" class="group relative w-20 h-20 rounded-full bg-olive hover:bg-olive-light text-white flex items-center justify-center transition-all duration-300 shadow-lg shadow-olive/25 focus:outline-none active:scale-95">
+            <span id="record-icon" class="w-6 h-6 rounded-full bg-white transition-all duration-300 group-hover:scale-110"></span>
+          </button>
+        </div>
+        <p id="record-status-text" class="text-xs text-chocolate/60 uppercase tracking-wider font-medium">
+          Appuyez pour démarrer
+        </p>
+
+        <button id="btn-back-to-identity" class="text-xs text-chocolate/50 hover:text-chocolate underline pt-2 font-light">
+          ← Changer de prénom
+        </button>
+      </div>
+
+      <!-- Étape 3 : Écoute & Envoi -->
+      <div id="step-review" class="hidden space-y-6 text-center">
+        <div>
+          <h2 class="font-serif text-2xl text-chocolate">Message prêt !</h2>
+          <p class="text-sm text-chocolate/70 mt-1">Réécoutez votre chef-d'œuvre avant envoi</p>
+        </div>
+
+        <div class="bg-ivory/60 p-4 rounded-xl border border-chocolate/5 space-y-3">
+          <audio id="audio-preview" controls class="w-full h-10 accent-olive"></audio>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <button id="btn-send" class="w-full py-4 bg-olive hover:bg-olive-light text-white font-medium rounded-xl transition-all duration-200 shadow-md shadow-olive/20 flex items-center justify-center space-x-2 text-base active:scale-[0.99]">
+            <span>Envoyer le message 💌</span>
+          </button>
+
+          <button id="btn-re-record" class="w-full py-3 bg-transparent hover:bg-ivory text-chocolate/70 font-medium rounded-xl border border-chocolate/15 transition duration-200 text-sm">
+            🗑️ Recommencer l'enregistrement
+          </button>
+        </div>
+      </div>
+
+      <!-- Étape 4 : Confirmation -->
+      <div id="step-success" class="hidden space-y-6 text-center py-4">
+        <div class="w-16 h-16 bg-olive/10 text-olive rounded-full flex items-center justify-center mx-auto text-2xl">
+          ❄️
+        </div>
+        <div class="space-y-2">
+          <h2 class="font-serif text-3xl text-chocolate">Un grand merci !</h2>
+          <p class="text-sm text-chocolate/80 leading-relaxed font-light">
+            Votre message a bien été enregistré. Clément & Elisa ont hâte de l'écouter !
+          </p>
+        </div>
+        <div class="pt-4">
+          <button id="btn-reset" class="px-6 py-3 bg-ivory hover:bg-ivory-dark text-chocolate font-medium rounded-xl border border-chocolate/15 transition text-sm">
+            Laisser un autre message
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Network / Messages d'erreur -->
+      <div id="status-message" class="hidden mt-4 p-3 rounded-lg text-xs text-center"></div>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="text-center text-xs text-chocolate/40 py-4 font-light">
+      <p>Mariage d'hiver — Clément & Elisa</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT LOGIQUE JS -->
+  <script>
+    // URL GOOGLE APPS SCRIPT DÉPLOYÉE
+    const GOOGLE_SCRIPT_URL = "https://drive.google.com/drive/folders/1_bYexAEF6P_Wp07KPrgE1SJ508R3E6S4";
+
+    // Constantes & Variables
+    const MAX_RECORDING_TIME = 120; // 2 minutes max
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlob = null;
+    let recordingTimer = null;
+    let secondsElapsed = 0;
+    let audioCtx = null;
+    let analyser = null;
+    let animFrameId = null;
+
+    // Éléments du DOM
+    const steps = {
+      identity: document.getElementById('step-identity'),
+      recording: document.getElementById('step-recording'),
+      review: document.getElementById('step-review'),
+      success: document.getElementById('step-success')
+    };
+
+    const guestNameInput = document.getElementById('guest-name');
+    const displayGuestName = document.getElementById('display-guest-name');
+    const timerDisplay = document.getElementById('timer-display');
+    const recordBtn = document.getElementById('btn-record-toggle');
+    const recordIcon = document.getElementById('record-icon');
+    const recordStatusText = document.getElementById('record-status-text');
+    const audioPreview = document.getElementById('audio-preview');
+    const statusMessage = document.getElementById('status-message');
+    const visualizerCanvas = document.getElementById('visualizer');
+    const canvasCtx = visualizerCanvas.getContext('2d');
+
+    // Navigation entre étapes
+    function showStep(stepName) {
+      Object.keys(steps).forEach(key => {
+        steps[key].classList.toggle('hidden', key !== stepName);
+      });
+      statusMessage.classList.add('hidden');
+    }
+
+    // Validation Identité
+    document.getElementById('btn-to-record').addEventListener('click', () => {
+      const name = guestNameInput.value.trim();
+      if (!name) {
+        showStatus("Merci d'indiquer votre prénom/nom 😊", "error");
+        return;
+      }
+      displayGuestName.textContent = name;
+      showStep('recording');
+    });
+
+    document.getElementById('btn-back-to-identity').addEventListener('click', () => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        stopRecording();
+      }
+      showStep('identity');
+    });
+
+    // Gestion Enregistrement
+    recordBtn.addEventListener('click', async () => {
+      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        await startRecording();
+      } else if (mediaRecorder.state === 'recording') {
+        stopRecording();
+      }
+    });
+
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        mediaRecorder.onstop = handleRecordingStop;
+
+        // Visualiseur Audio
+        setupVisualizer(stream);
+
+        mediaRecorder.start();
+        secondsElapsed = 0;
+        updateTimerDisplay();
+
+        recordingTimer = setInterval(() => {
+          secondsElapsed++;
+          updateTimerDisplay();
+          if (secondsElapsed >= MAX_RECORDING_TIME) {
+            stopRecording();
+          }
+        }, 1000);
+
+        // UI updates
+        recordIcon.className = "w-6 h-6 rounded-sm bg-white animate-pulse";
+        recordBtn.classList.add('animate-pulse-subtle', 'bg-red-600');
+        recordBtn.classList.remove('bg-olive');
+        recordStatusText.textContent = "Enregistrement... (Appuyez pour stopper)";
+        
+      } catch (err) {
+        showStatus("Impossible d'accéder au micro. Veuillez vérifier vos autorisations.", "error");
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      }
+      clearInterval(recordingTimer);
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+
+      // UI reset
+      recordIcon.className = "w-6 h-6 rounded-full bg-white";
+      recordBtn.classList.remove('animate-pulse-subtle', 'bg-red-600');
+      recordBtn.classList.add('bg-olive');
+      recordStatusText.textContent = "Traitement...";
+    }
+
+    function handleRecordingStop() {
+      audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      audioPreview.src = URL.createObjectURL(audioBlob);
+      showStep('review');
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+      const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+      timerDisplay.textContent = `${mins}:${secs} / 02:00`;
+    }
+
+    // Visualiseur d'ondes audio
+    function setupVisualizer(stream) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const source = audioCtx.createMediaStreamSource(stream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      source.connect(analyser);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        animFrameId = requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+
+        canvasCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+        const barWidth = (visualizerCanvas.width / bufferLength) * 2.5;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const barHeight = (dataArray[i] / 255) * visualizerCanvas.height;
+          canvasCtx.fillStyle = '#4A5D4E';
+          canvasCtx.fillRect(x, visualizerCanvas.height - barHeight, barWidth, barHeight);
+          x += barWidth + 2;
+        }
+      }
+      draw();
+    }
+
+    // Recommencer
+    document.getElementById('btn-re-record').addEventListener('click', () => {
+      showStep('recording');
+      recordStatusText.textContent = "Appuyez pour démarrer";
+      secondsElapsed = 0;
+      updateTimerDisplay();
+    });
+
+    // Envoi du fichier vers Google Drive
+    document.getElementById('btn-send').addEventListener('click', () => {
+      const sendBtn = document.getElementById('btn-send');
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = `<span>Envoi en cours... ❄️</span>`;
+
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      reader.onloadend = () => {
+        const base64Audio = reader.result.split(',')[1];
+        const rawName = guestNameInput.value.trim();
+        const safeName = rawName.replace(/[^a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]/g, "_");
+        const filename = `${safeName}_${Date.now()}.webm`;
+
+        fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            audio: base64Audio,
+            mimeType: 'audio/webm',
+            filename: filename
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.result === "success") {
+            showStep('success');
+          } else {
+            showStatus("Erreur lors de l'envoi : " + (data.error || "Inconnue"), "error");
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
+          }
+        })
+        .catch(err => {
+          showStatus("Erreur réseau. Vérifiez votre connexion Internet.", "error");
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
+        });
+      };
+    });
+
+    // Reset pour l'invité suivant
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      guestNameInput.value = '';
+      document.getElementById('btn-send').disabled = false;
+      document.getElementById('btn-send').innerHTML = `<span>Envoyer le message 💌</span>`;
+      showStep('identity');
+    });
+
+    // Affichage des messages statut
+    function showStatus(text, type) {
+      statusMessage.textContent = text;
+      statusMessage.className = `mt-4 p-3 rounded-lg text-xs text-center ${
+        type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-olive/10 text-olive'
+      }`;
+      statusMessage.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
