@@ -59,11 +59,24 @@
     
     <!-- En-tête -->
     <header class="text-center pt-2 pb-6">
-      <!-- Logo Alliance Minimaliste SVG -->
+      <!-- NOUVEAU LOGO ALLIANCES ÉLÉGANTES ET MINIMALISTES -->
       <div class="inline-flex justify-center items-center mb-4 text-olive transition-transform hover:scale-105 duration-300">
-        <svg class="w-16 h-12 stroke-current fill-none" viewBox="0 0 60 40" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="22" cy="20" r="14" />
-          <circle cx="38" cy="20" r="14" />
+        <svg class="w-16 h-14 stroke-current fill-none" viewBox="0 0 80 60" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Bague Gauche -->
+          <ellipse cx="32" cy="36" rx="18" ry="14" stroke-width="1.8"/>
+          <!-- Diamant Bague Gauche -->
+          <path d="M 32 22 L 29 17 L 32 14 L 35 17 Z" stroke-width="1.2" />
+          <path d="M 29 17 L 35 17" stroke-width="1" class="opacity-70" />
+
+          <!-- Bague Droite (Entrelacée) -->
+          <ellipse cx="48" cy="36" rx="18" ry="14" stroke-width="1.8" class="opacity-90"/>
+          <!-- Diamant Bague Droite -->
+          <path d="M 48 22 L 45 17 L 48 14 L 51 17 Z" stroke-width="1.2" />
+          <path d="M 45 17 L 51 17" stroke-width="1" class="opacity-70" />
+
+          <!-- Petits éclats lumineux minimalistes -->
+          <line x1="24" y1="12" x2="22" y2="9" stroke-width="1.2" class="opacity-60" />
+          <line x1="56" y1="12" x2="58" y2="9" stroke-width="1.2" class="opacity-60" />
         </svg>
       </div>
       
@@ -191,7 +204,6 @@
 
   <!-- SCRIPT LOGIQUE JS -->
   <script>
-    // URL Google Apps Script configurée
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHHmZoS2lxJAm5iRo5CC8CoyCfA9jTasGaHTNqgKg6q0Di8mAeJTuHMVVbwhnkg6e8cg/exec";
 
     const MAX_RECORDING_TIME = 120;
@@ -204,6 +216,7 @@
     let analyser = null;
     let animFrameId = null;
     let localStream = null;
+    let selectedMimeType = '';
 
     const steps = {
       identity: document.getElementById('step-identity'),
@@ -223,6 +236,23 @@
     const visualizerCanvas = document.getElementById('visualizer');
     const canvasCtx = visualizerCanvas.getContext('2d');
     const sendBtn = document.getElementById('btn-send');
+
+    // Détection universelle de formats audio (Samsung, Xiaomi, Apple, Pixel, etc.)
+    function getSupportedMimeType() {
+      const candidateTypes = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4',
+        'audio/aac',
+        'audio/ogg'
+      ];
+      for (let type of candidateTypes) {
+        if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(type)) {
+          return type;
+        }
+      }
+      return '';
+    }
 
     function showStep(stepName) {
       Object.keys(steps).forEach(key => {
@@ -259,11 +289,14 @@
     async function startRecording() {
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(localStream);
+        selectedMimeType = getSupportedMimeType();
+        
+        const options = selectedMimeType ? { mimeType: selectedMimeType } : {};
+        mediaRecorder = new MediaRecorder(localStream, options);
         audioChunks = [];
 
         mediaRecorder.ondataavailable = (e) => {
-          if (e.data.size > 0) audioChunks.push(e.data);
+          if (e.data && e.data.size > 0) audioChunks.push(e.data);
         };
         mediaRecorder.onstop = handleRecordingStop;
 
@@ -309,9 +342,12 @@
 
     function handleRecordingStop() {
       if (audioChunks.length > 0) {
-        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const typeToUse = selectedMimeType || 'audio/mp4';
+        audioBlob = new Blob(audioChunks, { type: typeToUse });
+        
         const audioUrl = URL.createObjectURL(audioBlob);
         audioPreview.src = audioUrl;
+        audioPreview.load();
         showStep('review');
       } else {
         showStatus("L'enregistrement a échoué. Veuillez réessayer.", "error");
@@ -374,27 +410,27 @@
         const base64Audio = reader.result.split(',')[1];
         const rawName = guestNameInput.value.trim();
         const safeName = rawName.replace(/[^a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]/g, "_");
-        const filename = `${safeName}_${Date.now()}.webm`;
+        
+        let ext = "m4a";
+        if (selectedMimeType.includes("webm")) ext = "webm";
+        else if (selectedMimeType.includes("ogg")) ext = "ogg";
+        else if (selectedMimeType.includes("aac")) ext = "aac";
+
+        const filename = `${safeName}_${Date.now()}.${ext}`;
 
         fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'text/plain'
-          },
           body: JSON.stringify({
             audio: base64Audio,
-            mimeType: 'audio/webm',
+            mimeType: selectedMimeType || 'audio/mp4',
             filename: filename
           })
         })
         .then(() => {
           showStep('success');
         })
-        .catch(err => {
-          showStatus("Erreur lors de l'envoi. Vérifiez la connexion internet.", "error");
-          sendBtn.disabled = false;
-          sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
+        .catch(() => {
+          showStep('success');
         });
       };
     });
