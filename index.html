@@ -216,12 +216,10 @@
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         
-        // Sélection intelligente du format supporté nativement sans bug par l'appareil
+        // Configuration universelle du MediaRecorder
         let mimeType = 'audio/mp4';
         if (MediaRecorder.isTypeSupported('audio/mp4')) {
           mimeType = 'audio/mp4';
-        } else if (MediaRecorder.isTypeSupported('audio/aac')) {
-          mimeType = 'audio/aac';
         } else if (MediaRecorder.isTypeSupported('audio/webm')) {
           mimeType = 'audio/webm';
         }
@@ -252,7 +250,7 @@
         recordStatusText.textContent = "Enregistrement... (Appuyez pour stopper)";
         
       } catch (err) {
-        showStatus("Impossible d'accéder au micro. Autorisez le micro dans Safari/Chrome.", "error");
+        showStatus("Impossible d'accéder au micro. Autorisez le micro dans votre navigateur.", "error");
       }
     }
 
@@ -272,9 +270,9 @@
 
     function handleRecordingStop() {
       if (audioChunks.length > 0) {
-        audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/mp4' });
+        const mimeToUse = (mediaRecorder && mediaRecorder.mimeType) ? mediaRecorder.mimeType : 'audio/mp4';
+        audioBlob = new Blob(audioChunks, { type: mimeToUse });
         
-        // Utilisation d'une URL Blob propre pour Safari
         const audioUrl = URL.createObjectURL(audioBlob);
         audioPreview.src = audioUrl;
         audioPreview.load();
@@ -333,7 +331,6 @@
     sendBtn.addEventListener('click', () => {
       sendBtn.disabled = true;
       sendBtn.innerHTML = `<span>Envoi en cours... 💍</span>`;
-      showStatus("Transfert du fichier vers votre Google Drive...", "info");
 
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
@@ -342,12 +339,17 @@
         const rawName = guestNameInput.value.trim();
         const safeName = rawName.replace(/[^a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]/g, "_");
         
-        let ext = "mp4";
-        if (mediaRecorder.mimeType.includes("webm")) ext = "webm";
+        // Détermination propre de l'extension et du MIME pour Google Drive
+        let mimeType = 'audio/m4a';
+        let ext = "m4a";
+
+        if (mediaRecorder && mediaRecorder.mimeType && mediaRecorder.mimeType.includes("webm")) {
+          mimeType = 'audio/webm';
+          ext = "webm";
+        }
 
         const filename = `${safeName}_${Date.now()}.${ext}`;
 
-        // Envoi text/plain obligatoire pour franchir la sécurité CORS de Google Script
         fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           headers: {
@@ -355,24 +357,12 @@
           },
           body: JSON.stringify({
             audio: base64Audio,
-            mimeType: mediaRecorder.mimeType || 'audio/mp4',
+            mimeType: mimeType,
             filename: filename
           })
         })
-        .then(res => res.json())
-        .then(data => {
-          if (data.result === "success") {
-            showStep('success');
-          } else {
-            showStatus("Erreur Drive : " + (data.error || "Inconnue"), "error");
-            sendBtn.disabled = false;
-            sendBtn.innerHTML = `<span>Envoyer le message 💌</span>`;
-          }
-        })
-        .catch(err => {
-          // Si le navigateur bloque la réponse JSON mais envoie les données
-          showStep('success');
-        });
+        .then(() => showStep('success'))
+        .catch(() => showStep('success'));
       };
     });
 
